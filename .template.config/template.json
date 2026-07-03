@@ -1,0 +1,47 @@
+{
+  "$schema": "http://json.schemastore.org/template",
+  "author": "WidBar",
+  "classifications": [ "Windows", "WinUI", "WidBar", "Widget" ],
+  "identity": "WidBar.Widget.Template",
+  "name": "WidBar widget (out-of-process)",
+  "shortName": "widbar-widget",
+  "description": "A WidBar taskbar widget: plugin process app plus MSIX packaging project, depending on the WidBar.SDK NuGet package.",
+  "sourceName": "WidBarWidget1",
+  "preferNameDirectory": true,
+  "sources": [
+    {
+      "modifiers": [
+        {
+          "exclude": [ "README.md", "**/.git/**" ]
+        },
+        {
+          "rename": { "PROJECT_README.md": "README.md" }
+        }
+      ]
+    }
+  ],
+  "tags": {
+    "language": "C#",
+    "type": "solution"
+  },
+  "guids": [
+    "11111111-2222-3333-4444-555555555555",
+    "22222222-3333-4444-5555-666666666666"
+  ],
+  "symbols": {
+    "PluginId": {
+      "type": "parameter",
+      "datatype": "string",
+      "defaultValue": "com.example.mywidget",
+      "replaces": "com.example.mywidget",
+      "description": "Reverse-DNS plugin identity (e.g. com.contoso.weather)."
+    },
+    "DisplayName": {
+      "type": "parameter",
+      "datatype": "string",
+      "defaultValue": "My Widget",
+      "replaces": "MY-WIDGET-DISPLAY-NAME",
+      "description": "Human-readable widget name shown in the WidBar catalog."
+    }
+  }
+}

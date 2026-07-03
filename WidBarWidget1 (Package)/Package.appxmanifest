@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<Package
+  xmlns="http://schemas.microsoft.com/appx/manifest/foundation/windows10"
+  xmlns:uap="http://schemas.microsoft.com/appx/manifest/uap/windows10"
+  xmlns:uap3="http://schemas.microsoft.com/appx/manifest/uap/windows10/3"
+  xmlns:rescap="http://schemas.microsoft.com/appx/manifest/foundation/windows10/restrictedcapabilities"
+  IgnorableNamespaces="uap uap3 rescap">
+
+  <!-- Update Publisher to match your signing certificate / Store identity. -->
+  <Identity
+    Name="WidBarWidget1.Widget"
+    Publisher="CN=Developer"
+    Version="1.0.0.0" />
+
+  <Properties>
+    <DisplayName>MY-WIDGET-DISPLAY-NAME</DisplayName>
+    <PublisherDisplayName>Developer</PublisherDisplayName>
+    <Logo>Images\StoreLogo.png</Logo>
+  </Properties>
+
+  <Dependencies>
+    <TargetDeviceFamily Name="Windows.Universal" MinVersion="10.0.17763.0" MaxVersionTested="10.0.19041.0" />
+    <TargetDeviceFamily Name="Windows.Desktop" MinVersion="10.0.17763.0" MaxVersionTested="10.0.19041.0" />
+  </Dependencies>
+
+  <Resources>
+    <Resource Language="x-generate"/>
+  </Resources>
+
+  <Applications>
+    <Application Id="App"
+      Executable="$targetnametoken$.exe"
+      EntryPoint="$targetentrypoint$">
+      <uap:VisualElements
+        DisplayName="MY-WIDGET-DISPLAY-NAME"
+        Description="Describe your widget here."
+        BackgroundColor="transparent" Square150x150Logo="Images\MediumTile.png" Square44x44Logo="Images\AppIcon.png">
+        <uap:DefaultTile Square71x71Logo="Images\SmallTile.png" Wide310x150Logo="Images\WideTile.png" Square310x310Logo="Images\LargeTile.png"/>
+        <uap:SplashScreen Image="Images\SplashScreen.png"/>
+      </uap:VisualElements>
+      <Extensions>
+        <!-- This is what makes WidBar discover the widget. -->
+        <uap3:Extension Category="windows.appExtension">
+          <uap3:AppExtension
+            Name="com.widbar.widget"
+            Id="widget"
+            PublicFolder="Public"
+            DisplayName="MY-WIDGET-DISPLAY-NAME"
+            Description="Describe your widget here.">
+            <uap3:Properties>
+              <WidBarPluginId>com.example.mywidget</WidBarPluginId>
+              <WidBarSdkVersion>1</WidBarSdkVersion>
+            </uap3:Properties>
+          </uap3:AppExtension>
+        </uap3:Extension>
+      </Extensions>
+    </Application>
+  </Applications>
+
+  <Capabilities>
+    <rescap:Capability Name="runFullTrust" />
+  </Capabilities>
+</Package>
