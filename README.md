@@ -4,6 +4,13 @@ Build Windows 11 taskbar widgets for [WidBar](https://apps.microsoft.com/detail/
 
 WidBar widgets return normal WinUI `UIElement`s for the taskbar preview, flyout, and settings surfaces. The `WidBar.SDK` NuGet package handles the host connection, settings draft flow, taskbar placement, process monitoring, logs, and recovery behavior.
 
+<p align="center">
+  <img src="https://github.com/user-attachments/assets/9e463b8d-4692-4cd8-a128-fab4a3474d33" width="200" height="240" alt="Screenshot 1">
+  <img src="https://github.com/user-attachments/assets/0c1ef7af-9be5-4e89-867e-7ba89517d4bd" width="200" height="198" alt="Screenshot 2">
+  <img src="https://github.com/user-attachments/assets/934b6043-616d-4981-abad-fa721e63d917" width="200" height="262" alt="Screenshot 3">
+  <img src="https://github.com/user-attachments/assets/95e29b25-453c-4ce8-adf7-f4350a26170d" width="200" height="227" alt="Screenshot 4">
+</p>
+
 ### Discord channel: https://discord.com/invite/JxyNUmznt
 
 This repo contains two `dotnet new` templates:
