@@ -8,6 +8,7 @@ with WinUI 3, C#, and the Windows App SDK.
   <img src="https://github.com/user-attachments/assets/934b6043-616d-4981-abad-fa721e63d917" width="200" height="262" alt="Screenshot 3">
   <img src="https://github.com/user-attachments/assets/95e29b25-453c-4ce8-adf7-f4350a26170d" width="200" height="227" alt="Screenshot 4">
 </p>
+
 ### Discord channel: https://discord.com/invite/JxyNUmznt
 
 This repository is a `dotnet new` template that scaffolds a working widget: the
