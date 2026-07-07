@@ -48,6 +48,15 @@ Contoso.Weather (Package)/       MSIX packaging project to publish
 ## Create a companion widget
 
 Use this when you already have a packaged WinUI app and want to ship a WidBar widget inside the same MSIX.
+This is useful when your app already has its own data, services, settings, or background logic, and you want to expose part of that experience on the Windows taskbar.
+
+Examples:
+
+- A music app can expose playback controls on the taskbar.
+- A productivity app can expose timers, tasks, or quick actions.
+- A monitoring app can expose live status and detailed flyouts.
+- A finance app can expose prices, watchlists, or alerts.
+- A communication app can expose presence, unread counts, or shortcuts.
 
 ```powershell
 dotnet new widbar-companion -n Contoso.App `
