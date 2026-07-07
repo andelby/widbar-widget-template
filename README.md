@@ -2,7 +2,12 @@
 
 Build Windows 11 taskbar widgets for [WidBar](https://apps.microsoft.com/detail/9PKLDNM83TP9)
 with WinUI 3, C#, and the Windows App SDK.
-
+<p align="center">
+  <img src="https://github.com/user-attachments/assets/9e463b8d-4692-4cd8-a128-fab4a3474d33" width="200" height="240" alt="Screenshot 1">
+  <img src="https://github.com/user-attachments/assets/0c1ef7af-9be5-4e89-867e-7ba89517d4bd" width="200" height="198" alt="Screenshot 2">
+  <img src="https://github.com/user-attachments/assets/934b6043-616d-4981-abad-fa721e63d917" width="200" height="262" alt="Screenshot 3">
+  <img src="https://github.com/user-attachments/assets/95e29b25-453c-4ce8-adf7-f4350a26170d" width="200" height="227" alt="Screenshot 4">
+</p>
 ### Discord channel: https://discord.com/invite/JxyNUmznt
 
 This repository is a `dotnet new` template that scaffolds a working widget: the
