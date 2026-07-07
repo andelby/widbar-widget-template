@@ -1,0 +1,44 @@
+{
+  "$schema": "http://json.schemastore.org/template",
+  "author": "WidBar",
+  "classifications": [ "Windows", "WinUI", "WidBar", "Widget", "Companion" ],
+  "identity": "WidBar.CompanionWidget.Template",
+  "name": "WidBar companion widget",
+  "shortName": "widbar-companion",
+  "description": "A tiny WidBar widget executable that ships inside an existing packaged WinUI app.",
+  "sourceName": "WidBarCompanion1",
+  "preferNameDirectory": true,
+  "sources": [
+    {
+      "modifiers": [
+        {
+          "exclude": [ "README.md", "**/.git/**", "**/bin/**", "**/obj/**", "**/.vs/**" ]
+        },
+        {
+          "rename": { "PROJECT_README.md": "README.md" }
+        }
+      ]
+    }
+  ],
+  "tags": { "language": "C#", "type": "project" },
+  "guids": [
+    "33333333-4444-5555-6666-777777777777",
+    "44444444-5555-6666-7777-888888888888"
+  ],
+  "symbols": {
+    "PluginId": {
+      "type": "parameter",
+      "datatype": "string",
+      "defaultValue": "com.example.companion",
+      "replaces": "com.example.companion",
+      "description": "Reverse-DNS plugin identity (e.g. com.contoso.app.companion)."
+    },
+    "DisplayName": {
+      "type": "parameter",
+      "datatype": "string",
+      "defaultValue": "My App Widget",
+      "replaces": "MY-COMPANION-DISPLAY-NAME",
+      "description": "Human-readable companion widget name shown in the WidBar catalog."
+    }
+  }
+}

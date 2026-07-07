@@ -12,7 +12,7 @@ For normal development you should not need to restart WidBar manually. Build and
 deploy the package, then use WidBar's refresh/discovery flow or reopen the Layout
 page if the catalog is already visible. If Visual Studio or `Add-AppxPackage`
 reports a file-in-use error, stop that specific widget instance from WidBar or
-end the widget ExtensionApp process as a troubleshooting step.
+end the widget process as a troubleshooting step.
 
 ## Seeing your logs
 
@@ -36,13 +36,13 @@ WidBar's host log lives at `%LOCALAPPDATA%\...\Logs\widbar.log`.
 
 Your widget runs in a process WidBar launches, not one Visual Studio started, so
 hitting F5 on the packaging project won't land your breakpoints once WidBar owns
-the process. Use **Debug > Attach to Process** and pick your `...ExtensionApp.exe`.
+the process. Use **Debug > Attach to Process** and pick your widget exe.
 While you're developing, a `System.Diagnostics.Debugger.Launch()` near the top of
 `InitializeAsync` is a quick way to catch it early.
 
 ## Running the .exe on its own
 
-If your ExtensionApp gets launched without WidBar, say you double-click the exe,
+If your widget exe gets launched without WidBar, say you double-click the exe,
 it doesn't try to render a phantom taskbar preview. Instead the SDK pops a small
 window explaining that this is a WidBar widget and needs WidBar to run. That's
 expected behaviour, not a bug.

@@ -12,7 +12,7 @@
     {
       "modifiers": [
         {
-          "exclude": [ "README.md", "**/.git/**" ]
+          "exclude": [ "README.md", "**/.git/**", "**/bin/**", "**/obj/**", "**/.vs/**" ]
         },
         {
           "rename": { "PROJECT_README.md": "README.md" }

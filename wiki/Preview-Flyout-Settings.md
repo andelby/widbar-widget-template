@@ -30,6 +30,28 @@ nothing worth showing, set `IsPreviewVisible` to false rather than rendering an
 empty box. The instance stays alive and configurable; it just disappears from the
 taskbar until you flip it back and request a refresh.
 
+### The preview is live and interactive
+
+The preview is your actual WinUI element rendered on the taskbar, not a
+screenshot of it. That means:
+
+- **Controls work.** Put a `Button` in the preview and its `Click` fires
+  normally; the click is consumed by the button and does not open the flyout.
+  Clicking anywhere that is not an interactive control opens the flyout as
+  usual. A tiny play/pause button next to a timer, straight on the taskbar, is
+  a couple of lines.
+- **Animations run** at full frame rate. Keep them subtle; it's the taskbar.
+- **File drag & drop is native.** Set `AllowDrop` on your preview and handle
+  `DragOver`/`Drop` like in any window. Pair it with
+  `Context.RequestOpenFlyout()` in `DragOver` to spring-load the flyout so the
+  user can continue the drag onto a bigger drop target.
+
+One layout caution: if you redraw shapes in response to your own `SizeChanged`
+(a sparkline that stretches, say), draw into a `Canvas` with fixed coordinates
+rather than resizing layout-participating shapes, and clip the canvas. Redrawing
+layout-affecting elements from `SizeChanged` can spiral into a `LayoutCycleException`,
+and an unclipped line happily paints over the text next to it.
+
 ## The flyout
 
 `CreateFlyoutContent()` is the popup that opens when someone clicks the preview.

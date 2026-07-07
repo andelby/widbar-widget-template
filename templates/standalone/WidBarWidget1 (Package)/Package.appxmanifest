@@ -50,7 +50,7 @@
             Description="Describe your widget here.">
             <uap3:Properties>
               <WidBarPluginId>com.example.mywidget</WidBarPluginId>
-              <WidBarSdkVersion>1</WidBarSdkVersion>
+              <WidBarSdkVersion>2</WidBarSdkVersion>
             </uap3:Properties>
           </uap3:AppExtension>
         </uap3:Extension>

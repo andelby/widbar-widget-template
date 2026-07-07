@@ -1,9 +1,9 @@
 # Building a WidBar widget
 
 This is the developer documentation for writing widgets that run on the WidBar
-taskbar: the `WidBar.SDK` package, the project template, and the small amount of
+taskbar: the `WidBar.SDK` package, the project templates, and the small amount of
 Windows packaging you can't get around. If you've shipped a WinUI 3 app before,
-almost none of this will surprise you. If you haven't, the template gets you to a
+almost none of this will surprise you. If you haven't, the templates get you to a
 running widget before you have to understand any of the plumbing.
 
 Quick note on who this is for. It's for people building widgets. If you just want
@@ -36,11 +36,24 @@ Widgets are discovered through a Windows AppExtension named `com.widbar.widget`.
 The template wires that up for you. See
 [[Packaging & publishing|Packaging-and-Publishing]] if you ever need to touch it.
 
+## Two ways to build one
+
+There are two equally supported paths, and they share the same plugin contract:
+
+- **Standalone widget** (`widbar-widget`): a small dedicated package whose only job
+  is being a widget. Right when the widget is the product.
+- **Companion widget**: your *existing* app's package gains a tiny second
+  executable that hosts the widget, sharing the package identity (and therefore
+  storage) with the app. Right when you already ship an app and want a taskbar
+  surface for it. The app itself doesn't change. See
+  [[Companion widgets|Companion-Widgets]].
+
 ## Where to go next
 
 - Brand new? Start with [[Getting started|Getting-Started]].
 - Writing the plugin class? [[The plugin contract|Plugin-Contract]].
 - Designing the UI? [[Preview, flyout & settings|Preview-Flyout-Settings]].
+- Adding a widget to an app you already ship? [[Companion widgets|Companion-Widgets]].
 - Ready to ship? [[Packaging & publishing|Packaging-and-Publishing]].
 - Something not working? [[Debugging]] and the [[FAQ]].
 

@@ -68,6 +68,10 @@ The `IWidgetContext` you receive (and which `WidgetPluginBase` parks in the
 - `DataDirectory`, a per-plugin folder, already created, for caches and files.
 - `RequestPreviewRefresh()`, which you call whenever your data, visibility or
   preferred preview width changes.
+- `RequestOpenFlyout()`, which asks the host to open your flyout. Its main use
+  is spring-loading: call it from your preview's `DragOver` handler so a
+  file drag over the taskbar opens the flyout and the drag can continue onto
+  it. It only ever opens (never closes), so calling it repeatedly is safe.
 
 ## Adding settings
 
@@ -93,19 +97,30 @@ live while the user is still editing, override `OnSettingsDraftChanged`; it fire
 on every change, and once more with the original JSON if they cancel, so you
 naturally revert.
 
-## Keeping a flyout warm (optional)
+## The flyout lives longer than you think
 
-The SDK keeps your flyout alive after first use so reopening it is instant. If
-that means leaving timers or subscriptions running while it's hidden, implement
-`IWidgetFlyoutLifecycle` and pause them:
+This one earns its own section because it bites even people who know better.
+`CreateFlyoutContent()` is called ONCE and the returned element is reused for
+every open: closing the flyout hides the window, it does not discard your UI.
+Two consequences:
+
+- Your element's `Unloaded` event fires at every close. If you tear down event
+  subscriptions or data bindings there, the second open shows a UI that never
+  updates again. Subscriptions that should live as long as the flyout content
+  belong to the content's lifetime, not to a single open/close cycle.
+- Timers and polling SHOULD pause while hidden, though. That's what
+  `IWidgetFlyoutLifecycle` is for: implement it on your plugin and the SDK
+  tells you exactly when the flyout window shows and hides.
 
 ```csharp
 public interface IWidgetFlyoutLifecycle
 {
-    void OnFlyoutShown();
-    void OnFlyoutHidden();
+    void OnFlyoutShown();    // resume timers, do one fresh render
+    void OnFlyoutHidden();   // pause timers; keep subscriptions alive
 }
 ```
+
+The rule of thumb: pause *work* on hide, never disconnect *state*.
 
 ## Two things that bite people
 

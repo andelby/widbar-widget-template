@@ -4,6 +4,7 @@
 - [[Getting started|Getting-Started]]
 - [[The plugin contract|Plugin-Contract]]
 - [[Preview, flyout & settings|Preview-Flyout-Settings]]
+- [[Companion widgets|Companion-Widgets]]
 - [[Packaging & publishing|Packaging-and-Publishing]]
 - [[Debugging]]
 - [[FAQ]]

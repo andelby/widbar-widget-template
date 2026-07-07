@@ -5,27 +5,37 @@
     <TargetFramework>net8.0-windows10.0.19041.0</TargetFramework>
     <TargetPlatformMinVersion>10.0.17763.0</TargetPlatformMinVersion>
     <UseWinUI>true</UseWinUI>
+    <WinUISDKReferences>false</WinUISDKReferences>
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
-    <RootNamespace>WidBarWidget1.ExtensionApp</RootNamespace>
-    <AssemblyName>WidBarWidget1.ExtensionApp</AssemblyName>
+    <RootNamespace>WidBarCompanion1.Widget</RootNamespace>
+    <AssemblyName>WidBarCompanion1.Widget</AssemblyName>
     <ApplicationManifest>app.manifest</ApplicationManifest>
     <Platforms>x64;ARM64</Platforms>
     <RuntimeIdentifiers>win-x64;win-arm64</RuntimeIdentifiers>
+    <WindowsAppSDKSelfContained>false</WindowsAppSDKSelfContained>
+    <DefineConstants>$(DefineConstants);DISABLE_XAML_GENERATED_MAIN</DefineConstants>
   </PropertyGroup>
 
   <!-- These properties feed the WidBar SDK build target, which writes
-       obj\widbar\plugin.json at build time. The packaging project picks that
-       file up, so id/name/version only live here. -->
+       obj\widbar\plugin.json at build time. Your app packaging project links
+       that file into Public\plugin.json. -->
   <PropertyGroup>
-    <WidBarPluginId>com.example.mywidget</WidBarPluginId>
-    <WidBarPluginName>MY-WIDGET-DISPLAY-NAME</WidBarPluginName>
-    <WidBarPluginDescription>Describe your widget here.</WidBarPluginDescription>
+    <WidBarPluginId>com.example.companion</WidBarPluginId>
+    <WidBarPluginName>MY-COMPANION-DISPLAY-NAME</WidBarPluginName>
+    <WidBarPluginDescription>Quick access to your app from the taskbar.</WidBarPluginDescription>
     <WidBarPluginCategory>Utility</WidBarPluginCategory>
     <WidBarPluginVersion>1.0.0</WidBarPluginVersion>
     <WidBarPluginPreviewWidth>150</WidBarPluginPreviewWidth>
     <WidBarPluginConfigurable>true</WidBarPluginConfigurable>
   </PropertyGroup>
+
+  <!-- Keep this as WidgetApp.xaml. A companion package already has the main
+       app's App.xaml/App.xbf, and duplicate App.xbf payload files break MSIX. -->
+  <ItemGroup>
+    <ApplicationDefinition Include="WidgetApp.xaml" />
+    <Page Remove="WidgetApp.xaml" />
+  </ItemGroup>
 
   <ItemGroup>
     <Manifest Include="$(ApplicationManifest)" />

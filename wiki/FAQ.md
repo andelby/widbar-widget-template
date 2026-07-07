@@ -30,6 +30,23 @@ you like; WidBar stores it per instance and gives it back via
 `IWidgetContext.SettingsJson`. Override `OnSettingsDraftChanged` for live preview
 while the user edits.
 
+**Can users click things inside the preview, or only open the flyout?**
+Both. Interactive controls in the preview receive their events (a button's
+`Click` fires and does not open the flyout); clicks on non-interactive parts
+open the flyout. Drag & drop onto the preview is native too. See
+[[Preview, flyout & settings|Preview-Flyout-Settings]].
+
+**I already ship a WinUI app. Do I need a separate widget package?**
+No. Add a tiny widget executable to the package you already ship: your app
+stays untouched, the widget shares the package (and its storage), and users get
+it with the app. The walkthrough is [[Companion widgets|Companion-Widgets]].
+
+**My flyout stops updating after I close and reopen it.**
+The flyout content is created once and reused across opens, and `Unloaded`
+fires at every close. Don't tear down subscriptions on `Unloaded`; pause timers
+via `IWidgetFlyoutLifecycle` instead. Details in
+[[the plugin contract|Plugin-Contract]].
+
 **Can I use third-party or native libraries?**
 Freely. You run in your own process, so add whatever you need; there's no shared
 load context to conflict with WidBar or other widgets. They ship as ordinary app
@@ -40,7 +57,7 @@ Make sure you deployed or registered the package, not only built the project.
 WidBar discovers installed AppExtensions, so the updated package must be
 registered with Windows. If WidBar is already open, refresh the widget catalog or
 reopen the Layout page. If deployment itself fails with a file-in-use error, stop
-that widget instance or end its ExtensionApp process, then deploy again.
+that widget instance or end its widget process, then deploy again.
 
 **Running the exe shows a little info window instead of my widget.**
 It was started without WidBar. Widgets only render inside the host; that window

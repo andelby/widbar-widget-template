@@ -34,8 +34,8 @@ WidBarWidget1 (Package)/       MSIX packaging project, this is what you publish
 - Identity and catalog entry: the `WidBarPlugin*` properties in
   `WidBarWidget1.ExtensionApp.csproj` generate `plugin.json` at build time (id,
   name, description, category, version, preview width, configurable).
-- Code: edit `MainPlugin.cs` and the views under `Views/`. Return WinUI
-  `UIElement`s for the taskbar preview, flyout and optional settings page.
+- Code: edit `MainPlugin.cs` or move the UI into your own view classes. Return
+  WinUI `UIElement`s for the taskbar preview, flyout and optional settings page.
 - Diagnostics: your `Debug.WriteLine`/`Trace.WriteLine` output appears in
   WidBar's developer console as `[Plugin:<id>]` (enable Developer mode in WidBar).
 
