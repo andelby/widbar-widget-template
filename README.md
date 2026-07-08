@@ -128,7 +128,7 @@ The catalog manifest (`plugin.json`) is generated at build time from the `WidBar
 
 * SDK package: https://www.nuget.org/packages/WidBar.SDK
 * WidBar on the Store: https://apps.microsoft.com/detail/9PKLDNM83TP9
-* Widget showcase: https://andelby.github.io/widbar/
+* Widget showcase: [https://andelby.github.io/widbar/](https://github.com/andelby/widbar)
 
 ## License
 
