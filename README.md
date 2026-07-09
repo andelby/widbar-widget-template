@@ -111,7 +111,6 @@ public sealed class WeatherPlugin : WidgetPluginBase, IConfigurableWidgetPlugin
 {
     public override string Id => "com.contoso.weather";
     public override string Name => "Weather";
-    public override WidgetCategory Category => WidgetCategory.Information;
 
     public override UIElement? CreatePreviewContent() => new WeatherPreviewView();
 

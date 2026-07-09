@@ -12,7 +12,6 @@ public sealed class WeatherPlugin : WidgetPluginBase
 {
     public override string Id   => "com.contoso.weather";
     public override string Name => "Weather";
-    public override WidgetCategory Category => WidgetCategory.Information;
     public override int PreviewLogicalWidth => 160;
 
     public override async Task InitializeAsync(IWidgetContext context)
@@ -29,11 +28,19 @@ public sealed class WeatherPlugin : WidgetPluginBase
 `Id` and `Name` are the only things `WidgetPluginBase` forces you to provide.
 Everything below has a default.
 
+## Where catalog metadata lives
+
+The description and category people see in the WidBar catalog are **not** on the
+plugin class. They come from your `plugin.json`, generated from the `WidBarPlugin*`
+properties in your `.csproj` (see [[Packaging & publishing|Packaging-and-Publishing]]).
+That's the single source: `WidBarPluginName`, `WidBarPluginDescription`,
+`WidBarPluginCategory`, `WidBarPluginVersion`. The plugin class carries only what
+the running widget needs.
+
 ## The members you'll touch
 
-The identity properties (`Id`, `Name`, `Description`, `Version`, `Category`) show
-up in WidBar's UI. `Category` is the `WidgetCategory` enum, defaulting to
-`Utility`.
+`Id` and `Name` are the runtime identity (the id is the handshake key; the name
+titles the standalone-launch window). Everything else is layout or lifecycle.
 
 For layout, `PreviewLogicalWidth` is how wide you want your taskbar slot, in
 logical (96-DPI) pixels, defaulting to 188. WidBar re-reads it after init and
@@ -62,8 +69,8 @@ All the `Create*` methods run on the UI thread. `IWidgetPlugin` is
 The `IWidgetContext` you receive (and which `WidgetPluginBase` parks in the
 `Context` property) is your line back to the host:
 
-- `WidgetId` and `InstanceId`. The second one is unique per placed copy, which is
-  how you tell two instances of the same widget apart.
+- `InstanceId`, unique per placed copy, which is how you tell two instances of
+  the same widget apart. (Your own `Id` constant identifies the widget itself.)
 - `SettingsJson`, this instance's saved settings, in whatever shape you chose.
 - `DataDirectory`, a per-plugin folder, already created, for caches and files.
 - `RequestPreviewRefresh()`, which you call whenever your data, visibility or
@@ -72,6 +79,10 @@ The `IWidgetContext` you receive (and which `WidgetPluginBase` parks in the
   is spring-loading: call it from your preview's `DragOver` handler so a
   file drag over the taskbar opens the flyout and the drag can continue onto
   it. It only ever opens (never closes), so calling it repeatedly is safe.
+- `RequestAttention()`, which asks the host to bring your widget to the front.
+  When it is a member of a smart stack (several widgets sharing one taskbar
+  slot), the host makes it the visible member so a timely event is not missed,
+  e.g. a finished timer or an incoming notification. No-op when not stacked.
 
 ## Adding settings
 
@@ -133,12 +144,10 @@ on the UI thread, but if your data updates on a background thread (a timer, a
 network callback), marshal back to the UI thread before touching XAML, then call
 `RequestPreviewRefresh()`.
 
-The enums, for reference:
-
-```csharp
-enum WidgetCategory { Utility, System, Media, Productivity, Information, Developer, Entertainment }
-enum WidgetFlyoutBackdrop { Transparent, Mica, Acrylic }
-```
+For reference: `FlyoutBackdrop` is the `WidgetFlyoutBackdrop` enum
+(`Transparent`, `Mica`, `Acrylic`). And the category you set in the csproj
+(`WidBarPluginCategory`) is one of: `Utility`, `System`, `Media`,
+`Productivity`, `Information`, `Developer`, `Entertainment`.
 
 Next up: what each surface can actually contain, in
 [[Preview, flyout & settings|Preview-Flyout-Settings]].

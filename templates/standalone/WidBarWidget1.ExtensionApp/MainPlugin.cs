@@ -16,10 +16,11 @@ public sealed class MainPlugin : WidgetPluginBase, IConfigurableWidgetPlugin
     private TextBlock? _previewText;
     private Timer? _timer;
 
+    // Catalog metadata (description, category, version) lives in the .csproj
+    // WidBarPlugin* properties -> plugin.json, the single source the WidBar
+    // catalog reads. The plugin class only carries what the runtime needs.
     public override string Id => "com.example.mywidget";
     public override string Name => "MY-WIDGET-DISPLAY-NAME";
-    public override string Description => "Describe your widget here.";
-    public override WidgetCategory Category => WidgetCategory.Utility;
 
     public override int PreviewLogicalWidth => 150;
     public override int FlyoutWidth => 360;

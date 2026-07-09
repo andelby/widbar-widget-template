@@ -93,7 +93,7 @@ widgets, but without a packaging project of its own:
 
   <ItemGroup>
     <PackageReference Include="Microsoft.WindowsAppSDK" Version="2.2.0" />
-    <PackageReference Include="WidBar.SDK" Version="1.2.0" />
+    <PackageReference Include="WidBar.SDK" Version="2.0.0" />
     <!-- optionally: <ProjectReference Include="..\MyApp.Core\MyApp.Core.csproj" /> -->
   </ItemGroup>
 </Project>
