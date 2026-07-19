@@ -1,8 +1,13 @@
 # WidBar Widget Templates
 
-Build Windows 11 taskbar widgets for [WidBar](https://apps.microsoft.com/detail/9PKLDNM83TP9) with WinUI 3, C#, and the Windows App SDK.
+Build Windows 11 taskbar widgets for
+[WidBar](https://apps.microsoft.com/detail/9PKLDNM83TP9) with WinUI 3, C# and the
+Windows App SDK.
 
-WidBar widgets return normal WinUI `UIElement`s for the taskbar preview, flyout, and settings surfaces. The `WidBar.SDK` NuGet package handles the host connection, settings draft flow, taskbar placement, process monitoring, logs, and recovery behavior.
+These templates use the official `WidBar.SDK` 2.0 contract. A widget provides
+normal WinUI `UIElement` content for the taskbar preview, flyout and optional
+settings page. WidBar handles discovery, placement, per-instance settings,
+automatic light and dark themes, smart stacks, logs and process recovery.
 
 <p align="center">
   <img src="https://github.com/user-attachments/assets/9e463b8d-4692-4cd8-a128-fab4a3474d33" width="200" height="240" alt="Screenshot 1">
@@ -11,7 +16,7 @@ WidBar widgets return normal WinUI `UIElement`s for the taskbar preview, flyout,
   <img src="https://github.com/user-attachments/assets/95e29b25-453c-4ce8-adf7-f4350a26170d" width="200" height="227" alt="Screenshot 4">
 </p>
 
-### Discord channel: https://discord.com/invite/JxyNUmznt
+Developer community: https://discord.com/invite/JxyNUmznt
 
 This repo contains two `dotnet new` templates:
 
@@ -47,8 +52,9 @@ Contoso.Weather (Package)/       MSIX packaging project to publish
 
 ## Create a companion widget
 
-Use this when you already have a packaged WinUI app and want to ship a WidBar widget inside the same MSIX.
-This is useful when your app already has its own data, services, settings, or background logic, and you want to expose part of that experience on the Windows taskbar.
+Use this when you already have a packaged WinUI app and want to ship a WidBar
+widget inside the same MSIX. It is a good fit when your app already owns the
+data or services that the widget needs.
 
 Examples:
 
@@ -70,7 +76,10 @@ This creates:
 Contoso.App.Widget/              tiny widget exe to add to your app package
 ```
 
-Add the generated project to your existing solution, reference it from your `.wapproj`, link its generated `obj\widbar\plugin.json` into `Public\plugin.json`, and add a second hidden `<Application>` entry with the `com.widbar.widget` AppExtension.
+Add the generated project to your existing solution, reference it from your
+`.wapproj`, link its generated `obj\widbar\plugin.json` into
+`Public\plugin.json`, and add a second hidden `<Application>` entry with the
+`com.widbar.widget` AppExtension.
 
 The full walkthrough is in [Companion Widgets](wiki/Companion-Widgets.md).
 
@@ -82,11 +91,19 @@ A WidBar widget can expose three WinUI surfaces:
 * Flyout: a rich interactive window opened when the user clicks the preview.
 * Settings: optional configuration UI hosted by WidBar with Save and Cancel.
 
-Examples include performance meters, media controls, timers, app companions, launchers, dashboards, monitoring tools, and quick actions.
+The preview can contain live controls and lightweight animations. Flyouts can
+host richer controls, pickers and third-party UI libraries. Standard WinUI
+theme resources update automatically with the Windows theme.
+
+Widgets can also take part in smart stacks. They can pause preview-only work
+while another stack member is visible and request attention when an important
+event occurs.
 
 ## Documentation
 
-The full developer guide is in the [Wiki](../../wiki). The same pages ship in this repo under [`wiki/`](wiki/).
+The full developer guide is in the
+[GitHub wiki](https://github.com/andelby/widbar-widget-template/wiki). The
+source pages are also available in [`wiki/`](wiki/).
 
 Start here:
 
@@ -101,7 +118,8 @@ Start here:
 * Windows 11.
 * WidBar installed from the Microsoft Store.
 * .NET 8 SDK.
-* Visual Studio 2022+ with the Windows application development workload, or equivalent Windows App SDK tooling.
+* Visual Studio 2022 or later with the Windows application development workload,
+  or equivalent Windows App SDK tooling.
 * Developer Mode enabled for local package deployment.
 
 ## The plugin in 30 seconds
@@ -111,7 +129,9 @@ public sealed class WeatherPlugin : WidgetPluginBase, IConfigurableWidgetPlugin
 {
     public override string Id => "com.contoso.weather";
     public override string Name => "Weather";
-    public override WidgetCategory Category => WidgetCategory.Information;
+    public override int PreviewLogicalWidth => 180;
+    public override WidgetFlyoutBackdrop FlyoutBackdrop =>
+        WidgetFlyoutBackdrop.Mica;
 
     public override UIElement? CreatePreviewContent() => new WeatherPreviewView();
 
@@ -122,7 +142,9 @@ public sealed class WeatherPlugin : WidgetPluginBase, IConfigurableWidgetPlugin
 }
 ```
 
-The catalog manifest (`plugin.json`) is generated at build time from the `WidBarPlugin*` properties in the widget project file.
+The catalog manifest is generated at build time from the `WidBarPlugin*`
+properties in the widget project file. Description and category belong there,
+not on the runtime plugin class.
 
 ## Links
 

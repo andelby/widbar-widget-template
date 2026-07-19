@@ -8,6 +8,8 @@ application development workload, or the .NET 8 SDK plus Windows App SDK
 tooling if you prefer the command line. You also need WidBar installed from the
 Microsoft Store, since WidBar is the host that discovers and runs widgets.
 
+The generated projects reference `WidBar.SDK` 2.0.0.
+
 ## Install the templates
 
 Clone or download the
@@ -91,12 +93,12 @@ Follow the complete checklist in [[Companion widgets|Companion-Widgets]].
 
 Open WidBar, go to the Layout page, and your widget appears in the catalog.
 Drag it onto a free space in the taskbar preview and it shows up on the real
-taskbar. WidBar watches the AppExtension catalog, so redeployed widgets can be
-refreshed from WidBar without restarting the app.
+taskbar. After a redeploy, use Refresh on the Layout page to discover the new
+build without restarting WidBar.
 
 If a deploy reports locked files, close the running widget process for that
 package and deploy again.
 
 From here, [[the plugin contract|Plugin-Contract]] walks through the class you
 just created, and [[Preview, flyout & settings|Preview-Flyout-Settings]] covers
-what goes in each surface.
+what goes in each surface, including automatic themes and smart stacks.

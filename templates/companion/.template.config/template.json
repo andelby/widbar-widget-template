@@ -5,7 +5,7 @@
   "identity": "WidBar.CompanionWidget.Template",
   "name": "WidBar companion widget",
   "shortName": "widbar-companion",
-  "description": "A tiny WidBar widget executable that ships inside an existing packaged WinUI app.",
+  "description": "A WidBar.SDK 2.0 companion widget that ships inside an existing packaged WinUI app.",
   "sourceName": "WidBarCompanion1",
   "preferNameDirectory": true,
   "sources": [
