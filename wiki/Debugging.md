@@ -67,6 +67,10 @@ exception from `CreatePreviewContent()`. Then verify your resources are included
 in the package payload and that any third-party XAML resource dictionaries are
 merged before the preview is created.
 
+If the preview looks correct in one Windows theme but not the other, remove
+fixed foreground and background colors. Use WinUI `ThemeResource` brushes and
+keep the preview root transparent.
+
 And if the settings gear never shows up, you haven't implemented
 `IConfigurableWidgetPlugin`.
 

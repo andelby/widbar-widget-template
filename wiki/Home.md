@@ -27,6 +27,10 @@ Everything else is WidBar's job, not yours: process lifetime, taskbar placement,
 per-monitor DPI, settings storage, and restart/disable behaviour when a widget
 keeps crashing.
 
+The SDK also applies the Windows light or dark theme to each host surface.
+Smart stack APIs let a widget pause preview-only work while hidden and request
+attention when it has something timely to show.
+
 One thing worth learning early: a single process serves every copy of your
 widget. Drop it on two taskbars and `CreatePlugin()` runs twice in the same
 process. So keep per-widget state in instance fields. The moment you reach for a

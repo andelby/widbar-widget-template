@@ -21,10 +21,10 @@ taskbar slot is heavy and confusing in Task Manager. The widget exe references
 only what the widget needs, starts in a blink, and your app's single-instance
 logic never has to learn about widgets.
 
-Because both exes live in the same package, they share the package identity:
-same `LocalState`, same `LocalSettings`. Your widget reads the data your app
-writes without any IPC. For code reuse, put shared models and services in a
-class library both projects reference.
+Because both exes live in the same package, they share the package identity,
+including `LocalState` and `LocalSettings`. Your widget can read data your app
+writes there. For code reuse, put shared models and services in a class library
+that both projects reference.
 
 ## Fast start
 
@@ -266,11 +266,8 @@ fully supported by MSIX and the Store.
 ## Deploy and test
 
 Build and deploy the packaging project as usual. The widget appears in WidBar's
-catalog next to every other widget; your app's behaviour doesn't change at all.
-That's the point: the whole change set is one new tiny project, two blocks in
-the wapproj and one block in the manifest. The app itself: zero modified lines.
+catalog next to every other widget. Use Refresh on the Layout page after a
+redeploy if the new build is not discovered immediately.
 
-This walkthrough is the exact change set validated on a shipping PDF reader
-with a custom `Main`, single-instance redirection and WebView2: the app built
-unchanged, the widget exe built in seconds, and the widget-host process stayed
-a few megabytes instead of dragging the app's browser runtime onto the taskbar.
+The widget uses the same SDK 2.0 contract as a standalone widget, including
+automatic theme support, smart stack visibility and attention requests.

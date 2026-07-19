@@ -25,6 +25,10 @@ the ExtensionApp `.csproj`. Edit the properties and the JSON follows.
 Keep `WidBarPluginId` identical to the `Id` your plugin class returns. If they
 drift, WidBar won't match the catalog entry to the running plugin.
 
+Description and category live only in this project metadata. Do not add runtime
+`Description` or `Category` overrides to the plugin class. Those properties are
+not part of the SDK 2.0 runtime contract.
+
 ## The package manifest
 
 `Package.appxmanifest` in the packaging project declares the AppExtension that
@@ -58,6 +62,10 @@ in from the wapproj:
 Your actual code, every DLL, managed or native, ships as normal app payload of
 the executable. Nothing special, no shared probing, no version fights with other
 widgets, because you're in your own process.
+
+Keep all dependency files beside the widget executable. If a XAML control
+library includes resource dictionaries, merge them from the widget application
+definition before creating preview or flyout content.
 
 ## Architectures
 

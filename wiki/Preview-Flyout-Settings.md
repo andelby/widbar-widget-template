@@ -52,6 +52,43 @@ rather than resizing layout-participating shapes, and clip the canvas. Redrawing
 layout-affecting elements from `SizeChanged` can spiral into a `LayoutCycleException`,
 and an unclipped line happily paints over the text next to it.
 
+### Light and dark themes
+
+WidBar applies the current Windows shell theme to the preview, flyout and
+settings host. There is no theme API to call from the plugin.
+
+Keep the preview root transparent and use WinUI theme resources instead of
+fixed foreground or background colors:
+
+```xml
+<Grid Background="Transparent">
+    <Border
+        Background="{ThemeResource CardBackgroundFillColorDefaultBrush}"
+        BorderBrush="{ThemeResource CardStrokeColorDefaultBrush}"
+        BorderThickness="1"
+        CornerRadius="6">
+        <TextBlock
+            Foreground="{ThemeResource TextFillColorPrimaryBrush}"
+            Text="Weather" />
+    </Border>
+</Grid>
+```
+
+Standard controls update when Windows changes theme. If a custom renderer
+caches colors, listen to `ActualThemeChanged` on its root element and rebuild
+only those cached brushes. Do not paint the taskbar background yourself.
+
+### Smart stack visibility
+
+Only one member of a smart stack is visible at a time. Use
+`IWidgetContext.IsPreviewVisible` and `PreviewVisibilityChanged` to stop
+animation, polling or rendering that only serves the preview while another
+member is on top.
+
+Call `RequestAttention()` when an important event should bring the widget to
+the top, such as a completed timer. The call is safe outside a stack and does
+nothing there.
+
 ## The flyout
 
 `CreateFlyoutContent()` is the popup that opens when someone clicks the preview.
@@ -72,6 +109,10 @@ public override UIElement? CreateFlyoutContent() => new MyFlyoutView(_settings);
 The SDK keeps the flyout warm after the first open so it reappears instantly. If
 your flyout does ongoing work, implement `IWidgetFlyoutLifecycle` (see
 [[the plugin contract|Plugin-Contract]]) and pause it in `OnFlyoutHidden`.
+
+When a file picker or another modal window must open from the flyout, wrap it in
+`WidgetFlyout.EnterModalScope()`. This prevents the flyout from closing while
+focus is temporarily owned by the modal window.
 
 ## Settings
 
@@ -106,7 +147,10 @@ public override void OnSettingsDraftChanged(string json)
 ## If you use a control library
 
 Some XAML control libraries need their resource dictionary merged in. Do it in
-`App.xaml` the usual way, or call `MergeResourceDictionaryFromFile(relativePath)`
-from your `App` to load a loose dictionary shipped alongside the executable.
-Ship third-party managed or native DLLs as normal package payload next to your
-ExtensionApp; they belong to your widget package and are not shared with WidBar.
+the widget application definition the usual way. If the library ships a loose
+dictionary, call `MergeResourceDictionaryFromFile(relativePath)` from your
+`App`.
+
+Ship third-party managed or native DLLs as normal package payload next to the
+widget executable. They belong to your package and are loaded by your widget
+process, not by WidBar or another widget.

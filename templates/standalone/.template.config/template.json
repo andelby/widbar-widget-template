@@ -3,9 +3,9 @@
   "author": "WidBar",
   "classifications": [ "Windows", "WinUI", "WidBar", "Widget" ],
   "identity": "WidBar.Widget.Template",
-  "name": "WidBar widget (out-of-process)",
+  "name": "WidBar standalone widget",
   "shortName": "widbar-widget",
-  "description": "A WidBar taskbar widget: plugin process app plus MSIX packaging project, depending on the WidBar.SDK NuGet package.",
+  "description": "A standalone WidBar taskbar widget with a WinUI 3 project, MSIX packaging project and WidBar.SDK 2.0.",
   "sourceName": "WidBarWidget1",
   "preferNameDirectory": true,
   "sources": [

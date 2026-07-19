@@ -17,6 +17,8 @@ WidBarWidget1 (Package)/       MSIX packaging project, this is what you publish
   own process, so add any dependency you like with no conflicts.
 - `MainPlugin.cs` is your entry point: it returns the preview, flyout and
   settings UI. Start there.
+- The sample follows the Windows light or dark theme automatically and pauses
+  preview-only work when another smart stack member is visible.
 
 ## Build and run
 
@@ -27,17 +29,23 @@ WidBarWidget1 (Package)/       MSIX packaging project, this is what you publish
    *Build > Deploy*, or (with Developer Mode on) register the generated loose
    layout with `Add-AppxPackage -Register ...\AppxManifest.xml`.
 3. Start WidBar. Your widget shows up in the catalog, so drag it onto the
-   taskbar. WidBar watches the catalog, so a redeploy is picked up live.
+   taskbar. After a redeploy, use Refresh on the Layout page if the new build is
+   not picked up immediately.
 
 ## Customize
 
 - Identity and catalog entry: the `WidBarPlugin*` properties in
-  `WidBarWidget1.ExtensionApp.csproj` generate `plugin.json` at build time (id,
-  name, description, category, version, preview width, configurable).
+  `WidBarWidget1.ExtensionApp.csproj` generate `plugin.json` at build time.
+  Keep description and category in the project file.
 - Code: edit `MainPlugin.cs` or move the UI into your own view classes. Return
   WinUI `UIElement`s for the taskbar preview, flyout and optional settings page.
-- Diagnostics: your `Debug.WriteLine`/`Trace.WriteLine` output appears in
-  WidBar's developer console as `[Plugin:<id>]` (enable Developer mode in WidBar).
+- Theme: use WinUI `ThemeResource` values and keep the preview root
+  transparent. WidBar applies the current Windows theme to every surface.
+- Smart stacks: use `RequestAttention()` for important events and
+  `PreviewVisibilityChanged` to suspend preview-only updates while hidden.
+- Diagnostics: your `Debug.WriteLine` or `Trace.WriteLine` output appears in
+  WidBar's developer console as `[Plugin:<id>]`. Enable Developer mode in
+  WidBar to see it.
 
 ## Before publishing
 

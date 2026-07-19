@@ -25,8 +25,8 @@ public sealed class WeatherPlugin : WidgetPluginBase
 }
 ```
 
-`Id` and `Name` are the only things `WidgetPluginBase` forces you to provide.
-Everything below has a default.
+`Id` and `Name` are the only abstract properties on `WidgetPluginBase`.
+`Version` defaults to `1.0.0`, and the layout properties have usable defaults.
 
 ## Where catalog metadata lives
 
@@ -82,7 +82,38 @@ The `IWidgetContext` you receive (and which `WidgetPluginBase` parks in the
 - `RequestAttention()`, which asks the host to bring your widget to the front.
   When it is a member of a smart stack (several widgets sharing one taskbar
   slot), the host makes it the visible member so a timely event is not missed,
-  e.g. a finished timer or an incoming notification. No-op when not stacked.
+  for example a finished timer or an incoming notification. It does nothing
+  when the widget is not stacked.
+- `IsPreviewVisible`, which tells you whether this widget is the member
+  currently shown by its smart stack.
+- `PreviewVisibilityChanged`, which is raised on the UI thread whenever that
+  smart stack visibility changes.
+
+The context visibility and the plugin visibility property answer different
+questions. `IWidgetContext.IsPreviewVisible` says whether this instance is on
+top of its stack. `IWidgetPlugin.IsPreviewVisible` says whether the plugin wants
+to be shown at all. A media widget can set its plugin visibility to false when
+there is no session, while a visible media widget can still sit behind another
+member of a smart stack.
+
+Pause preview-only timers when context visibility becomes false, then refresh
+once when it becomes true:
+
+```csharp
+public override async Task InitializeAsync(IWidgetContext context)
+{
+    await base.InitializeAsync(context);
+    context.PreviewVisibilityChanged += OnPreviewVisibilityChanged;
+    SetPreviewUpdatesEnabled(context.IsPreviewVisible);
+}
+
+private void OnPreviewVisibilityChanged(object? sender, bool isVisible)
+{
+    SetPreviewUpdatesEnabled(isVisible);
+}
+```
+
+Unsubscribe from `PreviewVisibilityChanged` in `DisposeAsync`.
 
 ## Adding settings
 
@@ -132,6 +163,16 @@ public interface IWidgetFlyoutLifecycle
 ```
 
 The rule of thumb: pause *work* on hide, never disconnect *state*.
+
+If a flyout opens a picker or another modal window, keep the flyout alive with
+`WidgetFlyout.EnterModalScope()`:
+
+```csharp
+using var modalScope = WidgetFlyout.EnterModalScope();
+var file = await picker.PickSingleFileAsync();
+```
+
+The scope ends when it is disposed, and nested scopes are supported.
 
 ## Two things that bite people
 

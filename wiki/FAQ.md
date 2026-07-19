@@ -30,6 +30,18 @@ you like; WidBar stores it per instance and gives it back via
 `IWidgetContext.SettingsJson`. Override `OnSettingsDraftChanged` for live preview
 while the user edits.
 
+**How do I support light and dark themes?**
+Use WinUI `ThemeResource` brushes and leave the preview root transparent.
+WidBar applies the current Windows shell theme to preview, flyout and settings
+surfaces automatically. Listen to `ActualThemeChanged` only when a custom
+renderer caches concrete colors.
+
+**How should my widget behave inside a smart stack?**
+Use `IWidgetContext.IsPreviewVisible` and `PreviewVisibilityChanged` to pause
+preview-only work while another member is visible. Call `RequestAttention()`
+when a completed timer, alert or similar event should bring your widget to the
+top.
+
 **Can users click things inside the preview, or only open the flyout?**
 Both. Interactive controls in the preview receive their events (a button's
 `Click` fires and does not open the flyout); clicks on non-interactive parts
@@ -46,6 +58,11 @@ The flyout content is created once and reused across opens, and `Unloaded`
 fires at every close. Don't tear down subscriptions on `Unloaded`; pause timers
 via `IWidgetFlyoutLifecycle` instead. Details in
 [[the plugin contract|Plugin-Contract]].
+
+**A picker closes my flyout. What should I do?**
+Create a `WidgetFlyout.EnterModalScope()` before opening the picker and dispose
+the scope after it closes. The flyout stays active while the modal window owns
+focus.
 
 **Can I use third-party or native libraries?**
 Freely. You run in your own process, so add whatever you need; there's no shared

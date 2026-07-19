@@ -1,8 +1,6 @@
 using System.Text.Json;
-using Microsoft.UI;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
-using Microsoft.UI.Xaml.Media;
 using WidBar.SDK;
 
 namespace WidBarWidget1.ExtensionApp;
@@ -10,11 +8,16 @@ namespace WidBarWidget1.ExtensionApp;
 // Sample widget: a clock on the taskbar, a bigger clock in the flyout and a
 // 12/24h toggle in settings. Replace the UI with your own. This code runs in
 // its own process, so feel free to pull in any NuGet or native dependency.
-public sealed class MainPlugin : WidgetPluginBase, IConfigurableWidgetPlugin
+public sealed class MainPlugin :
+    WidgetPluginBase,
+    IConfigurableWidgetPlugin,
+    IWidgetFlyoutLifecycle
 {
     private Settings _settings = new();
     private TextBlock? _previewText;
-    private Timer? _timer;
+    private TextBlock? _flyoutText;
+    private DispatcherTimer? _previewTimer;
+    private DispatcherTimer? _flyoutTimer;
 
     // Catalog metadata (description, category, version) lives in the .csproj
     // WidBarPlugin* properties -> plugin.json, the single source the WidBar
@@ -50,16 +53,11 @@ public sealed class MainPlugin : WidgetPluginBase, IConfigurableWidgetPlugin
 
     private string TimeText => DateTime.Now.ToString(_settings.Use24h ? "HH:mm:ss" : "hh:mm:ss tt");
 
-    public override Task InitializeAsync(IWidgetContext context)
+    public override async Task InitializeAsync(IWidgetContext context)
     {
         _settings = Settings.FromJson(context.SettingsJson);
-        base.InitializeAsync(context);
-
-        // Ask WidBar to refresh the taskbar preview once a second.
-        _timer = new Timer(_ => Context?.RequestPreviewRefresh(), null,
-            TimeSpan.Zero, TimeSpan.FromSeconds(1));
-
-        return Task.CompletedTask;
+        await base.InitializeAsync(context);
+        context.PreviewVisibilityChanged += OnPreviewVisibilityChanged;
     }
 
     // Taskbar preview. Return a compact WinUI element sized for a taskbar slot.
@@ -71,19 +69,20 @@ public sealed class MainPlugin : WidgetPluginBase, IConfigurableWidgetPlugin
             Text = TimeText,
             FontSize = 16,
             FontWeight = Microsoft.UI.Text.FontWeights.SemiBold,
-            Foreground = new SolidColorBrush(Colors.White),
             HorizontalAlignment = HorizontalAlignment.Center,
             VerticalAlignment = VerticalAlignment.Center,
         };
 
-        var root = new Grid();
+        var root = new Grid
+        {
+            Background = null,
+        };
         root.Children.Add(_previewText);
-        root.Loaded += (_, _) => _previewText.Text = TimeText;
 
-        // Keep the visible text fresh while the preview is alive.
-        var refresh = new DispatcherTimer { Interval = TimeSpan.FromSeconds(1) };
-        refresh.Tick += (_, _) => _previewText!.Text = TimeText;
-        refresh.Start();
+        _previewTimer?.Stop();
+        _previewTimer = new DispatcherTimer { Interval = TimeSpan.FromSeconds(1) };
+        _previewTimer.Tick += OnPreviewTimerTick;
+        SetPreviewUpdatesEnabled(Context?.IsPreviewVisible ?? true);
 
         return root;
     }
@@ -92,16 +91,16 @@ public sealed class MainPlugin : WidgetPluginBase, IConfigurableWidgetPlugin
     // so anything goes: scrolling, input, Win2D, whatever you need.
     public override UIElement? CreateFlyoutContent()
     {
-        var clock = new TextBlock
+        _flyoutText = new TextBlock
         {
             Text = TimeText,
             FontSize = 40,
             HorizontalAlignment = HorizontalAlignment.Center,
         };
 
-        var timer = new DispatcherTimer { Interval = TimeSpan.FromSeconds(1) };
-        timer.Tick += (_, _) => clock.Text = TimeText;
-        timer.Start();
+        _flyoutTimer?.Stop();
+        _flyoutTimer = new DispatcherTimer { Interval = TimeSpan.FromSeconds(1) };
+        _flyoutTimer.Tick += OnFlyoutTimerTick;
 
         var panel = new StackPanel
         {
@@ -109,7 +108,7 @@ public sealed class MainPlugin : WidgetPluginBase, IConfigurableWidgetPlugin
             Padding = new Thickness(24),
             VerticalAlignment = VerticalAlignment.Center,
         };
-        panel.Children.Add(clock);
+        panel.Children.Add(_flyoutText);
         panel.Children.Add(new TextBlock
         {
             Text = "MY-WIDGET-DISPLAY-NAME",
@@ -136,6 +135,7 @@ public sealed class MainPlugin : WidgetPluginBase, IConfigurableWidgetPlugin
         {
             draft.Use24h = toggle.IsOn;
             context.SaveSettings(draft.ToJson());
+            context.RequestPreviewRefresh();
         };
 
         var panel = new StackPanel { Spacing = 16 };
@@ -152,12 +152,79 @@ public sealed class MainPlugin : WidgetPluginBase, IConfigurableWidgetPlugin
         {
             _previewText.Text = TimeText;
         }
+
+        if (_flyoutText is not null)
+        {
+            _flyoutText.Text = TimeText;
+        }
+    }
+
+    public void OnFlyoutShown()
+    {
+        if (_flyoutText is not null)
+        {
+            _flyoutText.Text = TimeText;
+        }
+
+        _flyoutTimer?.Start();
+    }
+
+    public void OnFlyoutHidden()
+    {
+        _flyoutTimer?.Stop();
     }
 
     public override ValueTask DisposeAsync()
     {
-        _timer?.Dispose();
-        _timer = null;
+        if (Context is not null)
+        {
+            Context.PreviewVisibilityChanged -= OnPreviewVisibilityChanged;
+        }
+
+        _previewTimer?.Stop();
+        _flyoutTimer?.Stop();
+        _previewTimer = null;
+        _flyoutTimer = null;
+        _previewText = null;
+        _flyoutText = null;
         return ValueTask.CompletedTask;
+    }
+
+    private void OnPreviewVisibilityChanged(object? sender, bool isVisible)
+    {
+        SetPreviewUpdatesEnabled(isVisible);
+    }
+
+    private void SetPreviewUpdatesEnabled(bool isVisible)
+    {
+        if (isVisible)
+        {
+            if (_previewText is not null)
+            {
+                _previewText.Text = TimeText;
+            }
+
+            _previewTimer?.Start();
+        }
+        else
+        {
+            _previewTimer?.Stop();
+        }
+    }
+
+    private void OnPreviewTimerTick(object? sender, object e)
+    {
+        if (_previewText is not null)
+        {
+            _previewText.Text = TimeText;
+        }
+    }
+
+    private void OnFlyoutTimerTick(object? sender, object e)
+    {
+        if (_flyoutText is not null)
+        {
+            _flyoutText.Text = TimeText;
+        }
     }
 }

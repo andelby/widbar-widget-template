@@ -51,11 +51,16 @@ https://github.com/andelby/widbar-widget-template/wiki/Companion-Widgets
 - Shared app data: because this widget ships in your app package, it shares the
   same package identity, `LocalState` and `LocalSettings` as the main app.
 - Dependencies: add any NuGet packages the widget needs to this project.
+- Theme: use WinUI `ThemeResource` values and keep the preview root
+  transparent. WidBar applies the current Windows theme automatically.
+- Smart stacks: use `RequestAttention()` for important events and
+  `PreviewVisibilityChanged` to pause preview-only updates while hidden.
 
 ## Build and run
 
 Build and deploy your existing packaging project. WidBar discovers the companion
-widget from the installed AppExtension and shows it in the catalog.
+widget from the installed AppExtension and shows it in the catalog. Use Refresh
+on the Layout page after a redeploy if needed.
 
 If deployment reports locked files, close the running widget process for your
 package and deploy again.
