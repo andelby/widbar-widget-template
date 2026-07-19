@@ -85,7 +85,7 @@ package, so you don't ship signing certificates yourself.
 
 WidBar has an in-app showcase backed by a public catalog. Listing is optional and
 free: open a PR against
-[andelby/winbar-showcase](https://github.com/andelby/winbar-showcase) with an
+[andelby/widbar](https://github.com/andelby/widbar) with an
 entry for your widget.
 
 ```json

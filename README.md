@@ -150,7 +150,7 @@ not on the runtime plugin class.
 
 * SDK package: https://www.nuget.org/packages/WidBar.SDK
 * WidBar on the Store: https://apps.microsoft.com/detail/9PKLDNM83TP9
-* Widget showcase: https://andelby.github.io/winbar-showcase/
+* Widget showcase: [https://andelby.github.io/widbar/](https://github.com/andelby/widbar)
 
 ## License
 

@@ -53,6 +53,6 @@ WidBarWidget1 (Package)/       MSIX packaging project, this is what you publish
   reservation.
 - Replace the placeholder images in `Images\`.
 - Submit the packaging project's `.msixupload` to the Microsoft Store, then
-  optionally list it in [andelby/winbar-showcase](https://github.com/andelby/winbar-showcase).
+  optionally list it in [andelby/widbar](https://github.com/andelby/widbar).
 
 See the [wiki](https://github.com/andelby/widbar-widget-template/wiki) for details.
