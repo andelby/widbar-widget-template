@@ -5,14 +5,14 @@
   "identity": "WidBar.Widget.Template",
   "name": "WidBar standalone widget",
   "shortName": "widbar-widget",
-  "description": "A standalone WidBar taskbar widget with a WinUI 3 project, MSIX packaging project and WidBar.SDK 2.0.",
+  "description": "A standalone WidBar taskbar widget with a WinUI 3 project, MSIX packaging project and WidBar.SDK 2.2.",
   "sourceName": "WidBarWidget1",
   "preferNameDirectory": true,
   "sources": [
     {
       "modifiers": [
         {
-          "exclude": [ "README.md", "**/.git/**", "**/bin/**", "**/obj/**", "**/.vs/**" ]
+          "exclude": [ "README.md", "**/.git/**", "**/bin/**", "**/obj/**", "**/.vs/**", "**/AppPackages/**", "**/BundleArtifacts/**" ]
         },
         {
           "rename": { "PROJECT_README.md": "README.md" }

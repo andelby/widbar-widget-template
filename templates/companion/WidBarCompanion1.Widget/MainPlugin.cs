@@ -28,7 +28,6 @@ public sealed class MainPlugin :
     public override int PreviewLogicalWidth => 150;
     public override int FlyoutWidth => 360;
     public override int FlyoutHeight => 240;
-    public override WidgetFlyoutBackdrop FlyoutBackdrop => WidgetFlyoutBackdrop.Acrylic;
 
     private sealed class Settings
     {
