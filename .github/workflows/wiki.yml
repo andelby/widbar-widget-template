@@ -5,7 +5,7 @@ name: Publish docs to the wiki
 on:
   push:
     branches: [main]
-    paths: ['docs/**']
+    paths: ['docs/**', '.github/workflows/wiki.yml']
   workflow_dispatch:
 
 permissions:
@@ -31,8 +31,15 @@ jobs:
           # Mirror docs/: pages removed there disappear from the wiki too.
           find wiki -maxdepth 1 -name '*.md' -delete
           for page in docs/*.md; do
-            # Wiki links have no .md: (Flyout.md#size) becomes (Flyout#size).
-            sed -E 's/\]\(([A-Za-z0-9_-]+)\.md(#[^)]*)?\)/](\1\2)/g' "$page" > "wiki/$(basename "$page")"
+            name=$(basename "$page")
+            if [ "$name" = "Home.md" ]; then
+              cat "$page"
+            else
+              # The wiki already shows the page name as the title: drop the H1.
+              awk 'NR == 1 && /^# / { drop = 1; next } drop && /^$/ { drop = 0; next } { drop = 0; print }' "$page"
+            fi |
+              # Wiki links have no .md: (Flyout.md#size) becomes (Flyout#size).
+              sed -E 's/\]\(([A-Za-z0-9_-]+)\.md(#[^)]*)?\)/](\1\2)/g' > "wiki/$name"
           done
 
           cd wiki
