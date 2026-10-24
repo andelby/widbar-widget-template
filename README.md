@@ -16,7 +16,7 @@ Smart Stacks and crash recovery.
   <img src="https://github.com/user-attachments/assets/95e29b25-453c-4ce8-adf7-f4350a26170d" width="200" height="227" alt="Screenshot 4">
 </p>
 
-Developer community: https://discord.com/invite/JxyNUmznt
+Developer community: https://discord.gg/DfS27vaPjt
 
 ## Templates
 
