@@ -126,7 +126,7 @@ Adjust the relative path to where your app's exe sits in the package payload.
 | Symptom | Cause | Fix |
 | --- | --- | --- |
 | "Unable to find project information for ...Widget.csproj" or "...Widget.exe is not part of the payload" | The widget project is not in the solution | Add it to the solution |
-| Packaging fails on files with the same name and different content | The app and the widget use different Windows App SDK versions | Use the same version in both; WidBar.SDK 2.2.2 needs 2.5.1 or later |
+| Packaging fails on files with the same name and different content | The app and the widget use different Windows App SDK versions | Use the same version in both; WidBar.SDK 2.3.0 needs 2.6.4 or later |
 | "Two or more files with the same destination path" for `App.xbf` | The widget's application class is called `App.xaml` | Keep the name `WidgetApp.xaml` from the template |
 | WidBar starts your whole app instead of the widget | The extension sits on the main `<Application>` | Move it to the widget's own `<Application>` |
 

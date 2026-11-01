@@ -1,4 +1,4 @@
-**WidBar widgets** (SDK 2.2.2)
+**WidBar widgets** (SDK 2.3.0)
 
 - [Home](Home.md)
 - [Quick start](Quick-Start.md)
@@ -9,6 +9,7 @@
 - [Taskbar preview](Taskbar-Preview.md)
 - [Flyout](Flyout.md)
 - [Settings](Settings.md)
+- [Widget board](Widget-Board.md)
 - [API reference](API-Reference.md)
 
 **Ship**

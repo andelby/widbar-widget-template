@@ -1,6 +1,6 @@
 # API reference
 
-Everything in WidBar.SDK 2.2.2 that a widget uses. Types are in the `WidBar.SDK`
+Everything in WidBar.SDK 2.3.0 that a widget uses. Types are in the `WidBar.SDK`
 namespace, except `WidgetHostApplication`, which is in `WidBar.SDK.Hosting`.
 
 | Type | Kind | In one line |
@@ -12,6 +12,8 @@ namespace, except `WidgetHostApplication`, which is in `WidBar.SDK.Hosting`.
 | [`IConfigurableWidgetPlugin`](#iconfigurablewidgetplugin) | interface | Adds a settings page |
 | [`IWidgetSettingsContext`](#iwidgetsettingscontext) | interface | What the settings page gets |
 | [`IWidgetFlyoutLifecycle`](#iwidgetflyoutlifecycle) | interface | Tells you when the flyout shows and hides |
+| [`IWidgetTileLifecycle`](#iwidgettilelifecycle) | interface | Tells you when a board tile shows and hides |
+| [`IWidgetTileSettings`](#iwidgettilesettings) | interface | Lets the tile's gear edit the tile in place |
 | [`WidgetFlyout`](#widgetflyout) | static class | Keeps the flyout open during a dialog |
 | [`TaskbarButtonResources`](#taskbarbuttonresources) | resource dictionary | The taskbar's hover plate for your buttons |
 | [`WidgetCategory`](#widgetcategory) | enum | The catalog categories |
@@ -51,9 +53,11 @@ Implements `IAsyncDisposable`. Members with a default can be left out.
 | `bool HighlightPreviewOnHover` | `true` | Whether WidBar lights the whole preview under the pointer. Read once |
 | `int FlyoutWidth` | required | Flyout width in logical pixels. Read once |
 | `int FlyoutHeight` | required | Flyout height in logical pixels. Read once |
+| `int TileHeight` | `0` | Starting height of the board tile in logical pixels, `0` for the flyout's. Read once, per element. See [Widget board](Widget-Board.md) |
 | `Task InitializeAsync(IWidgetContext context)` | required | One time setup: read settings, start timers and network calls |
 | `UIElement? CreatePreviewContent()` | `null` | The taskbar preview. UI thread |
 | `UIElement? CreateFlyoutContent()` | required | The flyout content, or `null` for no flyout. Called once, the content is reused. UI thread |
+| `UIElement? CreateTileContent()` | `null` | The board tile's content, or `null` for the flyout's. Called once for a tile. UI thread |
 | `void OnSettingsDraftChanged(string settingsJson)` | does nothing | Called while settings are edited, after Save, and with the original JSON after Cancel. UI thread |
 | `ValueTask DisposeAsync()` | required | Stop timers, drop subscriptions. Called when the instance goes away |
 
@@ -70,8 +74,9 @@ An abstract `IWidgetPlugin` with defaults for everything except `Id` and `Name`.
 | `IsPreviewVisible` | `true` |
 | `HighlightPreviewOnHover` | `true` |
 | `FlyoutWidth`, `FlyoutHeight` | `390`, `480` |
+| `TileHeight` | `0` |
 | `InitializeAsync(context)` | Stores `context` in `Context` |
-| `CreatePreviewContent()`, `CreateFlyoutContent()` | `null` |
+| `CreatePreviewContent()`, `CreateFlyoutContent()`, `CreateTileContent()` | `null` |
 | `OnSettingsDraftChanged(json)` | does nothing |
 | `DisposeAsync()` | does nothing |
 
@@ -86,7 +91,10 @@ Passed to `InitializeAsync`, valid for the whole life of the instance.
 | --- | --- |
 | `string InstanceId` | Identifies this placed copy. Two copies of your widget have different ids |
 | `string SettingsJson` | This instance's saved settings. Updated after every save |
-| `string DataDirectory` | A folder for your files, already created. It belongs to the widget, so every instance shares it |
+| `string DataDirectory` | A folder for this copy's files, already created. Every copy has its own; a board tile's is deleted when the user takes the tile off the board |
+| `string SharedDataDirectory` | A folder for the files every copy of the widget shares, already created and always kept |
+| `bool IsBoardTile` | `true` for a copy that is a tile on the widget board: no preview and no flyout |
+| `string? BoardElement` | Which of your board elements a tile is: its `id` from `BoardElements.json`, or `null` for the default element and on the taskbar |
 | `void RequestPreviewRefresh()` | Asks WidBar to update the preview's spot. Call it after changing `PreviewLogicalWidth` or `IsPreviewVisible`; normal UI updates don't need it |
 | `void RequestOpenFlyout()` | Opens your flyout. Never closes an open one, so it is safe to repeat |
 | `void RequestAttention()` | Brings the widget to the front of its Smart Stack. Does nothing outside a stack. Any thread |
@@ -116,6 +124,25 @@ Optional. Implement it on your plugin class.
 | --- | --- |
 | `void OnFlyoutShown()` | The flyout became visible. Resume timers, render once |
 | `void OnFlyoutHidden()` | The flyout was hidden. Pause timers, keep subscriptions |
+
+## IWidgetTileLifecycle
+
+Optional. Implement it on your plugin class. Without it, a tile is reported to
+`IWidgetFlyoutLifecycle` as if it were the flyout.
+
+| Member | Description |
+| --- | --- |
+| `void OnTileShown()` | The tile is on the board and on screen. Resume live work. UI thread |
+| `void OnTileHidden()` | The board was put away, or the tile taken off it. Pause live work. UI thread |
+
+## IWidgetTileSettings
+
+Optional. Implement it on your plugin class to show the gear on every tile of
+the widget and handle it yourself.
+
+| Member | Description |
+| --- | --- |
+| `bool OnTileSettingsRequested()` | The tile's gear was pressed. Return `true` when the tile turned into its own settings, or back, in place; `false` to open the settings window. UI thread |
 
 ## WidgetFlyout
 

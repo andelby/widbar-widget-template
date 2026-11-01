@@ -3,6 +3,34 @@
 Changes to WidBar.SDK that matter to widget developers. The package is on
 [NuGet](https://www.nuget.org/packages/WidBar.SDK).
 
+## 2.3.0
+
+- The widget board, WidBar's full screen mosaic of widgets. A widget's tile
+  shows its flyout by default, with nothing to do in the widget. See
+  [Widget board](Widget-Board.md).
+- New `CreateTileContent` and `TileHeight`, to give the board content of its
+  own. `IWidgetContext.IsBoardTile` tells a tile from a taskbar copy.
+- Board elements: list them in a `BoardElements.json` next to the project
+  file, and the board offers each one as a tile of its own.
+  `IWidgetContext.BoardElement` says which one a tile is.
+- New `IWidgetTileLifecycle`, to resume and pause live work as a tile comes
+  and goes.
+- New `IWidgetTileSettings`: the gear on a tile can turn the tile into its own
+  settings, in place.
+- New `IWidgetContext.SharedDataDirectory`, for the data every copy of a
+  widget shares. `DataDirectory` belongs to one copy, and a tile's is deleted
+  when the tile is taken off the board.
+- Names and descriptions in `plugin.json` and `BoardElements.json` can contain
+  semicolons.
+- The package carries the API's documentation, for IntelliSense.
+- Built against Windows App SDK 2.6.4.
+
+## 2.2.3
+
+- A widget added to a Smart Stack takes the stack's width from the start.
+- A widget removed while it is still starting no longer leaves its preview
+  behind on the taskbar.
+
 ## 2.2.2
 
 - New `TaskbarButtonResources`: the hover and pressed plate of the Windows 11

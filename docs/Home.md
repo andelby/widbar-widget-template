@@ -5,7 +5,7 @@ WinUI 3 app built with `WidBar.SDK`: you write the UI and the logic, and the
 SDK takes care of the taskbar, the flyout window, the settings window and the
 lifecycle of every copy the user places.
 
-This guide covers **WidBar.SDK 2.2.2**.
+This guide covers **WidBar.SDK 2.3.0**.
 
 ## What a widget is made of
 
@@ -35,6 +35,7 @@ flowchart LR
 | Build what sits on the taskbar | [Taskbar preview](Taskbar-Preview.md) |
 | Build the panel that opens above it | [Flyout](Flyout.md) |
 | Let users configure the widget | [Settings](Settings.md) |
+| Put the widget on the widget board, with tiles of its own | [Widget board](Widget-Board.md) |
 | Look up a type or a member | [API reference](API-Reference.md) |
 | Ship it on the Microsoft Store | [Packaging and publishing](Packaging-and-Publishing.md) |
 | Add a widget to an app you already ship | [Companion widgets](Companion-Widgets.md) |
@@ -47,7 +48,7 @@ flowchart LR
 | --- | --- |
 | Windows | Windows 11, x64 or ARM64, with Developer Mode turned on |
 | Tools | Visual Studio 2026 with the WinUI application development workload, or the .NET 10 SDK and MSBuild |
-| Packages | `WidBar.SDK` 2.2.2 and `Microsoft.WindowsAppSDK` 2.5.1 or later |
+| Packages | `WidBar.SDK` 2.3.0 and `Microsoft.WindowsAppSDK` 2.6.4 or later |
 | Host | [WidBar](https://apps.microsoft.com/detail/9PKLDNM83TP9) from the Microsoft Store |
 
 ## Links
